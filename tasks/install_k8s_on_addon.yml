@@ -1,0 +1,28 @@
+---
+- name: k8s on AddonVMs
+  hosts: AddonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: adding k8s GPG key
+    shell: |
+        curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg |  apt-key add -
+        apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+  - name: update apt packages     
+    apt:
+        update_cache: yes
+  - name: install kubeadm
+    apt:
+        name: kubeadm
+        state: present
+  - name: install kubelet
+    apt:
+        name: kubelet
+        state: present
+  - name: install kubectl
+    apt:
+        name: kubectl
+        state: present
+...

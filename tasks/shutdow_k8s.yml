@@ -1,0 +1,9 @@
+---
+- name:  shutdown k8s master and worker
+  hosts: MyChameleonVMs
+#  become: yes
+  gather_facts: false
+  tasks:
+    - name: kubeadm reset command
+      shell: kubeadm reset
+...

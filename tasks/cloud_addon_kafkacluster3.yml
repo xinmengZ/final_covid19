@@ -1,0 +1,64 @@
+---
+#
+# EECS 4287/5287: Principles of Cloud Computing
+# Author: Aniruddha Gokhale
+# Created: Fall 2020
+#
+# should check if it is already created
+  - name: addon vm servers on the Chameleon
+    openstack.cloud.server:
+      state: present
+      auth:
+       auth_url: https://kvm.tacc.chameleoncloud.org:5000/v3
+       username: xinmengz
+       password: 990303Mm
+       project_name: CH-819381
+      name: Team3-kafkacluster3
+      image: cc1164e5-a0e2-4550-9218-6cf51ed269ee
+      key_name: xm
+      timeout: 200
+      flavor: "3"
+      nics:
+        - net-id: 4b484898-92b4-4a4b-9c5d-7d55bd72f1ee
+      security_groups:
+       - 25f7ae49-7ce2-4072-9ec9-ef0f0ba96605
+       - 3dd82016-cfd1-4935-8357-5dd60b255b96
+       - 339233fc-1836-43ae-bbc0-87981cd235af
+       - 7e09e9fd-4971-49bb-bd55-9aa2fa149b16
+       - 044a0efb-d5a1-4200-8474-f1af353aaf8a 
+  - name: assign floating ip from pool
+    openstack.cloud.floating_ip:
+      state: present
+      auth:
+       auth_url: https://kvm.tacc.chameleoncloud.org:5000/v3
+       username: xinmengz
+       password: 990303Mm
+       project_name: CH-819381
+      server: Team3-kafkacluster3
+      wait: yes
+    register: float_ret
+  - name: print host facts
+    debug:
+      msg: "newly added floating_ip_address is {{ float_ret.floating_ip.floating_ip_address }}"
+  - name: add host Teame3-KafkaCluster3
+    add_host:
+      hostname: "Teame3-KafkaCluster3"
+      groups: 
+       - "MyChameleonVMs"
+       - "Worker"
+       - "AddonVMs"
+      ansible_host: "{{ float_ret.floating_ip.floating_ip_address }}"
+      ansible_connection: "ssh"
+      ansible_ssh_private_key_file: "~/.ssh/xm.pem"
+  - name: Make sure floating ip success 
+    pause: 
+#      prompt: "Make sure it success" 
+      seconds: 10
+  - name: print host facts
+    debug:
+      msg: "added host {{ hostvars['Teame3-KafkaCluster3'].ansible_host }}" 
+  - name: clean known-host
+    shell: ssh-keygen -R "{{ hostvars['Teame3-KafkaCluster3'].ansible_host }}" 
+# should update the info to /etc/hosts for manual login and Myinvetroy to avoid create vm twice next time
+... 
+

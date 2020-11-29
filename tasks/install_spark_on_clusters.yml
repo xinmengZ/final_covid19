@@ -1,0 +1,18 @@
+---
+- name: install spark on Teame3-Clusters
+  hosts: MyClusterVMs
+  remote_user:  ubuntu
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name:  wget spark
+    shell: wget https://downloads.apache.org/spark/spark-3.0.1/spark-3.0.1-bin-hadoop2.7.tgz
+    
+  - name: tar xvf spark    
+    shell: tar xvf spark-*
+
+  - name: mv spark    
+    shell: mv spark-3.0.1-bin-hadoop2.7 /opt/spark
+       
+...

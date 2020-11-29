@@ -1,0 +1,17 @@
+---
+#
+# create vms for kafkaclusters
+- name: "create all VMs"
+  hosts: MyLocalVMs          # specified in the MyInventory file
+  remote_user:  ubuntu      # note that the user is ubuntu for 
+                             # vagrant-created VM else use the
+                             # appropriate user name
+
+  gather_facts: yes          # We ask Ansible to collect all facts
+  become_user: yes            # No need for sudo as we are not installing anything
+
+  tasks:    # the task to be performed (here I am showing the effect of include_)
+  - include_tasks: cloud_addon_kafkacluster3.yml
+
+...
+

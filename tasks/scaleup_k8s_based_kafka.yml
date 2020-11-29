@@ -1,0 +1,35 @@
+---
+- name: statup kafka on cluster
+# for Master
+  hosts: Master
+  remote_user:  cc
+#  become: true
+  gather_facts: no
+
+  tasks:
+  - name: copy kafka-5 yamls
+    copy: src=/vagrant/k8s/{{ item }} dest=/home/cc
+    with_items:
+    - kafka-5-inner-ip-service.yaml
+    - kafka-5-ip-service.yaml
+    - scaleup_kafka-5-deployment.yaml
+    
+  - name: delete  deployment
+    shell: kubectl delete deployment --ignore-not-found kafka-5-deployment
+  - name: delete  inner setvice
+    shell: kubectl delete service --ignore-not-found kafka-5-inner-ip-service
+  - name: delete  service
+    shell: kubectl delete service --ignore-not-found kafka-5-ip-service
+  - name: delete  configmap cluster-host
+    shell: kubectl delete configmap --ignore-not-found cluster-host 
+  - name: create configmap
+    shell: kubectl create configmap cluster-host --from-literal=MASTER_IP={{ hostvars['Teame3-KafkaCluster1'].ansible_host }}  --from-literal=WORK_IP={{ hostvars['Teame3-KafkaCluster3'].ansible_host }}
+#  - name: kubectl get configmaps
+#    shell: kubectl get configmaps cluster-host -o yaml
+  - name: start kafka-5-inner-ip-service
+    shell: kubectl apply -f kafka-5-inner-ip-service.yaml
+  - name: start kafka-5-ip-service
+    shell: kubectl apply -f kafka-5-ip-service.yaml
+  - name: start kafka-5-deployment
+    shell: kubectl apply -f scaleup_kafka-5-deployment.yaml
+...

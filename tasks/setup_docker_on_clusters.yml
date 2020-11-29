@@ -1,0 +1,28 @@
+---
+- name: startup docker on  Clusters
+# for clusters
+  hosts: MyClusterVMs
+  remote_user:  ubuntu
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: add docker user group 
+    shell: |
+        usermod -aG docker ubuntu
+        
+#  - name: docker load kafka image on clusters
+#    shell: |
+#        docker load -i /home/cc/kafka-zk.image
+
+#- name: load couchdb image on  Cluster2
+#  hosts: Teame3-KafkaCluster2
+#  remote_user:  ubuntu
+#  become: true
+#  gather_facts: no
+
+#  tasks:
+#  - name: docker load couchdb image on cluster2
+#    shell: |
+#        docker load -i /home/cc/couchdb.image
+...

@@ -1,0 +1,20 @@
+---
+- name: copy files to cloud VMs
+#  hosts: Teame3-KafkaCluster1 MyChameleonVMs
+  hosts: MyChameleonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  
+  - name: copy couchdb-deployment
+    copy:
+        src: k8s/couchdb-deployment.yaml
+        dest: /home/cc
+  - name: copy couchdb-ipservice
+    copy:
+        src: k8s/couchdb-ip-service.yaml
+        dest: /home/cc
+    
+...

@@ -1,0 +1,10 @@
+---
+- import_playbook: tasks/addon_vm.yml
+- import_playbook: tasks/export_cluster_hosts.yml
+- import_playbook: tasks/install_docker_on_addon.yml
+- import_playbook: tasks/install_k8s_on_addon.yml
+- import_playbook: tasks/setup_addon_firewall.yml
+- import_playbook: tasks/startup_docker_on_addon.yml
+- import_playbook: tasks/setup_k8s_addon.yml
+- import_playbook: tasks/scaleup_k8s_based_kafka.yml
+...

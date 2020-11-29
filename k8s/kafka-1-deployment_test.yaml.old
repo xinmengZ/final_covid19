@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: kafka-1
+  template:
+    metadata:
+      labels:
+        component: kafka-1
+    spec:
+      volumes:
+      - name: k1-logs
+        emptyDir: {}
+      containers:
+      - name: kafka-1 
+        image: kafka-zk:1.0
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 9092
+          - containerPort: 9093
+        volumeMounts:
+          - name: k1-logs
+            mountPath: "/tmp/kafka-logs"       
+#        command: ["/kafka/bin/kafka-server-start.sh"]
+#        args: [ "/kafka/config/server.properties", "--override", "listeners=INT://$(INT_LISTENER),EXT://0.0.0.0:9093", "--override", "listener.security.protocol.map=INT:PLAINTEXT,EXT:PLAINTEXT", "--override", "inter.broker.listener.name=INT", "--override", "advertised.listeners=INT://$(INT_LISTENER),EXT://$(EXT_ADVERTISED)", "--override", "zookeeper.connect=$(ZOOKEEPER)", "--override", "broker.id=1"]
+#        args: ["/kafka/bin/kafka-server-start.sh /kafka/config/server.properties --override listeners=INT://0.0.0.0:9092,EXT://0.0.0.0:9093  --override listener.security.protocol.map=INT:PLAINTEXT,EXT:PLAINTEXT --override inter.broker.listener.name=INT --override advertised.listeners=INT://kafka-1-inner-ip-service,EXT://129.114.24.206:30001 --override zookeeper.connect=zookeeper-ip-service:2181 --override broker.id=1"]
+        env:
+          - name: EXT_ADVERTISED
+            value: "129.114.24.206:30001"
+          - name: ZOOKEEPER
+            value: zookeeper-ip-service:2181 #10.108.52.225:2181
+          - name: INT_LISTENER  
+            value: kafka-1-inner-ip-service:9092
+#        env:
+#          - name: MY_POD_IP  
+#            valueFrom:
+#              fieldRef:
+#                fieldPath: status.podIP
+#          - name: KAFKA_ADVERTISED_PORT
+#            value: "9092"
+#          - name: KAFKA_ZOOKEEPER_CONNECT
+#            value: zookeeper-ip-service:2181
+#          - name: KAFKA_ADVERTISED_PORT
+#            value: "9092"
+#          - name: KAFKA_ADVERTISED_HOST_NAME
+#            value: $(MY_POD_IP)
+        tty: true
+#        livenessProbe:
+#          exec:
+#            command:
+#              - /opt/check.sh
+#          initialDelaySeconds: 30
+#          periodSeconds: 30
+#        readinessProbe:
+#          exec:
+#            command:
+#              - /opt/check.sh
+#          initialDelaySeconds: 30
+#          periodSeconds: 5
+        # command:
+        #   - /bin/bash
+#      imagePullSecrets:
+#        - name: regcred
+      

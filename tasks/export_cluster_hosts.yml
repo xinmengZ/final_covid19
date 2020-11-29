@@ -1,0 +1,19 @@
+---
+- name: create cluster file 
+  hosts: MyLocalVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  vars:
+    my_file: /vagrant/test_cluster
+    my_template: /vagrant/tasks/hosts.j2
+  tasks:
+    - name: Create "{{ my_file }}" you can replace  cluser file with it
+      template:
+        src: "{{ my_template }}"
+        dest: "{{ my_file }}"
+        owner: root
+        group: root
+        mode: "0644"
+...

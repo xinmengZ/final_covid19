@@ -1,0 +1,61 @@
+---
+- name: startup k8s KafkaClusters with pods k8s need 3 nodes at least
+# for clusters
+  hosts: MyChameleonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: docker load kafka image on clusters
+    shell: |
+        docker load -i /home/cc/kafka-zk.image
+# for Teame3-KafkaCluster2 used as couchdb server too
+  hosts: Teame3-KafkaCluster2
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: docker load couchdb image on cluster2
+    shell: |
+        docker load -i /home/cc/couchdb.image
+# for Teame3-KafkaCluster1
+  hosts: Teame3-KafkaCluster1
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  - name: start swarm as manager on KafkaCluster1
+    shell: |
+        docker swarm init
+# should get the output and fetch it back to loacl host
+# for Teame3-KafkaCluster2
+  hosts: Teame3-KafkaCluster2
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  - name: start swarm as worker on KafkaCluster2
+    shell: |
+        docker swarm join --token SWMTKN-1-3fx8epk5q3ypu0c9aedtyshqly1dc7ai2rfcm58wtqy34h419m-6c4ayz4yaoizjtiyyp5lxynrt 10.212.96.187:2377
+# for Teame3-KafkaCluster1
+  hosts: Teame3-KafkaCluster1
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  - name: startup zookeeper standalone and kafka cluster from  manager(KafkaCluster1)
+    shell: |
+# create network
+        docker network create --driver overlay kafka-net
+# startup zookeeper
+        docker service create --name zookeeper --mount type=volume,source=zoo-data,destination=/tmp/zookeeper --publish 2181:2181 --network kafka-net --constraint node.hostname==team3-kafkacluster1 --mode global kafka-zk:1.0 /kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties
+# startup kafka container1
+        docker service create --name kafka1 --mount type=volume,source=k1-logs,destination=/tmp/kafka-logs --publish 9093:9092 --network kafka-net --constraint node.hostname==team3-kafkacluster1 --mode global kafka-zk:1.0 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties --override listeners=INT://:9091,EXT://0.0.0.0:9092 --override listener.security.protocol.map=INT:PLAINTEXT,EXT:PLAINTEXT --override inter.broker.listener.name=INT --override advertised.listeners=INT://:9091,EXT://129.114.24.206:9093 --override zookeeper.connect=129.114.24.206:2181 --override broker.id=1
+        docker service create --name kafka2 --mount type=volume,source=k2-logs,destination=/tmp/kafka-logs --publish 9094:9092 --network kafka-net --constraint node.hostname==team3-kafkacluster1 --mode global kafka-zk:1.0 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties --override listeners=INT://:9091,EXT://0.0.0.0:9092 --override listener.security.protocol.map=INT:PLAINTEXT,EXT:PLAINTEXT --override inter.broker.listener.name=INT --override advertised.listeners=INT://:9091,EXT://129.114.24.206:9094 --override zookeeper.connect=129.114.24.206:2181 --override broker.id=2
+        docker service create --name kafka3 --mount type=volume,source=k3-logs,destination=/tmp/kafka-logs --publish 9095:9092 --network kafka-net --constraint node.hostname==team3-kafkacluster1 --mode global kafka-zk:1.0 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties --override listeners=INT://:9091,EXT://0.0.0.0:9092 --override listener.security.protocol.map=INT:PLAINTEXT,EXT:PLAINTEXT --override inter.broker.listener.name=INT --override advertised.listeners=INT://:9091,EXT://129.114.24.206:9095 --override zookeeper.connect=129.114.24.206:2181 --override broker.id=3
+        docker service create --name kafka4 --mount type=volume,source=k4-logs,destination=/tmp/kafka-logs --publish 9096:9092 --network kafka-net --constraint node.hostname==team3-kafkacluster2 --mode global kafka-zk:1.0 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties --override listeners=INT://:9091,EXT://0.0.0.0:9092 --override listener.security.protocol.map=INT:PLAINTEXT,EXT:PLAINTEXT --override inter.broker.listener.name=INT --override advertised.listeners=INT://:9091,EXT://129.114.24.223:9096 --override zookeeper.connect=129.114.24.206:2181 --override broker.id=4
+        docker service create --name kafka5 --mount type=volume,source=k5-logs,destination=/tmp/kafka-logs --publish 9097:9092 --network kafka-net --constraint node.hostname==team3-kafkacluster2 --mode global kafka-zk:1.0 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties --override listeners=INT://:9091,EXT://0.0.0.0:9092 --override listener.security.protocol.map=INT:PLAINTEXT,EXT:PLAINTEXT --override inter.broker.listener.name=INT --override advertised.listeners=INT://:9091,EXT://129.114.24.223:9097 --override zookeeper.connect=129.114.24.206:2181 --override broker.id=5
+
+...

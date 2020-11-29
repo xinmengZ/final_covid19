@@ -1,0 +1,75 @@
+---
+- name: clean services, deployments ,pods about kafka-zk on cluster
+# for Master
+  hosts: Master
+  remote_user:  cc
+#  become: true
+  gather_facts: no
+
+  tasks:
+#  - name: cleanup kafka-5-deployment
+#    shell: |    
+#        kubectl delete deployment kafka-5-deployment
+  - name: cleanup kafka-4-deployment
+    shell: |    
+        kubectl delete deployment kafka-4-deployment
+  - name: cleanup kafka-3-deployment
+    shell: |    
+        kubectl delete deployment kafka-3-deployment
+  - name: cleanup kafka-2-deployment
+    shell: |    
+        kubectl delete deployment kafka-2-deployment
+  - name: cleanup kafka-1-deployment
+    shell: |    
+        kubectl delete deployment kafka-1-deployment
+  - name: cleanup zookeeper-deployment
+    shell: |    
+        kubectl delete deployment zookeeper-deployment
+
+#  - name: cleanup kafka-5-inner-ip-service
+#    shell: |        
+#        kubectl delete service kafka-5-inner-ip-service
+  - name: cleanup kafka-4-inner-ip-service
+    shell: |    
+        kubectl delete service kafka-4-inner-ip-service
+  - name: cleanup kafka-3-inner-ip-inner-service
+    shell: |    
+        kubectl delete service kafka-3-inner-ip-service
+  - name: cleanup kafka-2-inner-ip-service
+    shell: |    
+        kubectl delete service kafka-2-inner-ip-service
+  - name: cleanup kafka-1-inner-ip-service
+    shell: |    
+        kubectl delete service kafka-1-inner-ip-service
+
+#  - name: cleanup kafka-5-ip-service
+#    shell: |        
+#        kubectl delete service kafka-5-ip-service
+  - name: cleanup kafka-4-ip-service
+    shell: |    
+        kubectl delete service kafka-4-ip-service
+  - name: cleanup kafka-3-ip-service
+    shell: |    
+        kubectl delete service kafka-3-ip-service
+  - name: cleanup kafka-2-ip-service
+    shell: |    
+        kubectl delete service kafka-2-ip-service
+  - name: cleanup kafka-1-ip-service
+    shell: |    
+        kubectl delete service kafka-1-ip-service
+  - name: cleanup zookeeper-ip-service
+    shell: |    
+        kubectl delete service zookeeper-ip-service
+#  register results and print them
+#  - name: get all deployment
+#    shell: |            
+#        kubectl get service --all-namespaces
+#  - name: get all pods
+#    shell: |            
+#        kubectl get pods --all-namespaces
+#  - name: get all deployment
+#    shell: |            
+#        kubectl get deployment --all-namespaces
+
+# sudo kubeadm reset -f
+...

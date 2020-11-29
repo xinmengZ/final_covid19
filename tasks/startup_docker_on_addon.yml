@@ -1,0 +1,29 @@
+---
+- name: load kafka image on  AddonVMs
+# for clusters
+  hosts: AddonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: add docker user group 
+    shell: |
+        usermod -aG docker cc
+        
+  - name: docker load kafka image on clusters
+    shell: |
+        docker load -i /home/cc/kafka-zk.image
+
+- name: load couchdb image on  Cluster2
+# for Teame3-KafkaCluster3 used as couchdb server too
+  hosts: AddonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: docker load couchdb image on cluster2
+    shell: |
+        docker load -i /home/cc/couchdb.image
+...

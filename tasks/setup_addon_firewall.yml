@@ -1,0 +1,53 @@
+---
+- name: open firewalls on KafkaClusters
+  hosts: AddonVMs
+  remote_user: cc
+  become: true
+
+  tasks:
+  - name: open zookeeper firewall 
+    shell: |
+      ufw allow 2181
+  - name: open couchdb firewall 
+    shell: |
+      ufw allow 5984
+  - name: open kafka firewall 
+    shell: |
+      ufw allow 9092
+  - name: open kafka firewall 
+    shell: |
+      ufw allow 9093
+  - name: open swarm firewall 
+    shell: |
+      ufw allow 2376/tcp
+  - name: open swarm firewall 
+    shell: |
+      ufw allow 2377/tcp
+  - name: open k8s firewall 
+    shell: |
+      ufw allow 2379/tcp
+  - name: open k8s firewall 
+    shell: |
+      ufw allow 2380/tcp
+  - name: open k8s firewall 
+    shell: |
+      ufw allow 6443/tcp
+  - name: open k8s firewall 
+    shell: |
+      ufw allow 10250/tcp
+  - name: open k8s firewall 
+    shell: |
+      ufw allow 10251/tcp
+  - name: open k8s firewall 
+    shell: |
+      ufw allow 10252/tcp
+  - name: open swarm firewall 
+    shell: |
+      ufw allow 4789/udp
+  - name: open swarm firewall 
+    shell: |
+      ufw allow 7946/tcp
+  - name: open k8s publish firewall 
+    shell: |
+      ufw allow 30000:30100/tcp
+...

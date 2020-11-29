@@ -1,0 +1,11 @@
+clouds:
+ chameleon:
+  auth:
+    auth_url: https://kvm.tacc.chameleoncloud.org:5000/v3
+    username: xinmengz
+    password: 990303Mm
+    project_name: CH-819381
+    user_domain_name: default
+    project_domain_name: default
+  region_name: "KVM@TACC"
+

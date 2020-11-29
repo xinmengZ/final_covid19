@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: couchdb
+  template:
+    metadata:
+      labels:
+        component: couchdb
+    spec:
+      volumes:
+      - name: couchdb-data
+        emptyDir: {}
+      containers:
+      - name: couchdb
+        image: couchdb:1.0       
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "125m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        ports:
+          - containerPort: 5984
+ #       volumeMounts:
+ #         - name: couchdb-data
+ #           mountPath: "/opt/couchdb/data"
+#        command: ["/opt/couchdb/bin/couchdb"]
+#        args: ["/kafka/config/zookeeper.properties"]
+        tty: true
+#        livenessProbe:
+#          exec:
+#            command:
+#              - /opt/check.sh
+#          initialDelaySeconds: 30
+#          periodSeconds: 30
+#        readinessProbe:
+#          exec:
+#            command:
+#              - /opt/check.sh
+#          initialDelaySeconds: 30
+#          periodSeconds: 5
+#      imagePullSecrets:
+#        - name: regcred
+      

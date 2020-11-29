@@ -1,0 +1,58 @@
+---
+<<<<<<< HEAD
+- name: statup couchdb on cluster
+  hosts: MyChameleonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: copy couchdb.image
+    copy:
+        src: /vagrant/couchdb.image
+        dest: /home/cc
+
+  - name: copy couchdb yamls
+    copy:
+        src: /vagrant/k8s/couchdb-deployment.yaml
+        dest: /home/cc
+
+    copy:
+        src: /vagrant/k8s/couchdb-ip-service.yaml
+        dest: /home/cc
+
+- name: statup couchdb on cluster
+=======
+- name: startup couchdb on cluster
+# for Master
+>>>>>>> aae17e1d7ca31a948ed521bd1fa3d3d5d64b82db
+  hosts: Master
+  remote_user:  cc
+#  become: true
+  gather_facts: no
+<<<<<<< HEAD
+  
+  - name: delete  couchdb
+    shell: kubectl delete deployment --ignore-not-found couchdb-deployment
+  - name: delete  couchdb setvice
+    shell: kubectl delete service --ignore-not-found couchdb-ip-service
+    
+  - name: start couchdb-ip-service
+    shell: |
+        kubectl apply -f $HOME/couchdb-ip-service.yaml
+                  
+  - name: start couchdb-deployment
+    shell: |
+        kubectl apply -f $HOME/couchdb-deployment.yaml
+
+=======
+
+  tasks:
+  - name: start couchdb-deployment
+    shell: |
+        kubectl apply -f $HOME/couchdb-deployment.yaml
+  - name: start couchdb-ip-service
+    shell: |
+        kubectl apply -f $HOME/couchdb-ip-service.yaml
+>>>>>>> aae17e1d7ca31a948ed521bd1fa3d3d5d64b82db
+...

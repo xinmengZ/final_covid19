@@ -1,0 +1,17 @@
+---
+- name: install docker and images on Teame3-KafkaClusters
+#  hosts: Teame3-KafkaCluster1 MyChameleonVMs
+  hosts: MyChameleonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: copy consumer.image.gz
+    copy:
+        src: /vagrant/consumer.image.gz
+        dest: /home/cc
+  - name: unzip images
+    shell: |
+        gzip -d /home/cc/consumer.image.gz
+...

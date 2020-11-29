@@ -1,0 +1,64 @@
+---
+- name: statup kafka on cluster
+# for Master
+  hosts: Master
+  remote_user:  cc
+#  become: true
+  gather_facts: no
+
+  tasks:
+  - name: copy kafka-(1-5) yamls
+    copy: src=/vagrant/k8s/{{ item }} dest=/home/cc
+    with_items:
+    - kafka-1-inner-ip-service.yaml
+    - kafka-1-ip-service.yaml
+    - kafka-1-deployment.yaml
+    - kafka-2-inner-ip-service.yaml
+    - kafka-2-ip-service.yaml
+    - kafka-2-deployment.yaml
+    - kafka-3-inner-ip-service.yaml
+    - kafka-3-ip-service.yaml
+    - kafka-3-deployment.yaml
+    - kafka-4-inner-ip-service.yaml
+    - kafka-4-ip-service.yaml
+    - kafka-4-deployment.yaml
+    - kafka-5-inner-ip-service.yaml
+    - kafka-5-ip-service.yaml
+    - kafka-5-deployment.yaml
+    - couchdb-deployment.yaml
+    - couchdb-ip-service.yaml
+
+  - name: create configmap
+    shell: kubectl create configmap cluster-host --from-literal=MASTER_IP={{ hostvars['Teame3-KafkaCluster1'].ansible_host }}  --from-literal=WORK_IP={{ hostvars['Teame3-KafkaCluster2'].ansible_host }}     
+  - name: start kafka-1-inner-ip-service
+    shell: kubectl apply -f kafka-1-inner-ip-service.yaml
+  - name: start kafka-1-ip-service
+    shell: kubectl apply -f kafka-1-ip-service.yaml
+  - name: start kafka-2-inner-ip-service
+    shell: kubectl apply -f kafka-2-inner-ip-service.yaml
+  - name: start kafka-2-ip-service
+    shell: kubectl apply -f kafka-2-ip-service.yaml
+  - name: start kafka-3-inner-ip-service
+    shell: kubectl apply -f kafka-3-inner-ip-service.yaml
+  - name: start kafka-3-ip-service
+    shell: kubectl apply -f kafka-3-ip-service.yaml
+  - name: start kafka-4-inner-ip-service
+    shell: kubectl apply -f kafka-4-inner-ip-service.yaml
+  - name: start kafka-4-ip-service
+    shell: kubectl apply -f kafka-4-ip-service.yaml
+#  - name: start kafka-5-inner-ip-service
+#    shell: kubectl apply -f kafka-5-inner-ip-service.yaml
+#  - name: start kafka-5-ip-service
+#    shell: kubectl apply -f kafka-5-ip-service.yaml
+
+  - name: start kafka-1-deployment
+    shell: kubectl apply -f kafka-1-deployment.yaml
+  - name: start kafka-2-deployment
+    shell: kubectl apply -f kafka-2-deployment.yaml
+  - name: start kafka-3-deployment
+    shell: kubectl apply -f kafka-3-deployment.yaml
+  - name: start kafka-4-deployment
+    shell: kubectl apply -f kafka-4-deployment.yaml
+#  - name: start kafka-5-deployment
+#    shell: kubectl apply -f kafka-5-deployment.yaml
+...

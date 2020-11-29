@@ -1,0 +1,15 @@
+---
+#- import_playbook: tasks/create_vms.yml
+#- import_playbook: tasks/export_cluster_hosts.yml
+- import_playbook: tasks/install_docker_on_clusters.yml
+- import_playbook: tasks/install_k8s_on_clusters.yml
+- import_playbook: tasks/setup_clusters_firewall.yml
+- import_playbook: tasks/setup_docker_on_clusters.yml
+- import_playbook: tasks/install_jdk_on_clusters.yml #java
+- import_playbook: tasks/install_spark_on_clusters.yml
+- import_playbook: tasks/build_pyspark_image.yml
+- import_playbook: tasks/setup_k8s_master.yml
+- import_playbook: tasks/setup_k8s_worker.yml
+- import_playbook: tasks/create_k8s_serviceaccount.yml
+# install jupyter
+...

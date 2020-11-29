@@ -1,0 +1,15 @@
+---
+- name: build spark image on clusters
+  hosts: MyClusterVMs
+  remote_user:  ubuntu
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: build spark image
+    shell: |
+        docker-image-tool.sh -r python -t 1.0 -p /opt/spark/kubernetes/dockerfiles/spark/bindings/python/Dockerfile build
+# export SPARK_HOME=/opt/spark
+# export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+# export PYSPARK_PYTHON=/usr/bin/python3
+...

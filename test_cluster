@@ -1,0 +1,19 @@
+#
+# This file was created by playbook tasks 
+# Do not modify it except nessary
+# Use it with ansible-playbook -i cluster [you yml]
+#
+[MyLocalVMs]
+127.0.0.1 ansible_connection=local
+
+[MyChameleonVMs]
+Teame3-KafkaCluster1 ansible_host=129.114.24.206 ansible_connection=ssh ansible_user=cc ansible_ssh_private_key_file=~/.ssh/xm.pem
+Teame3-KafkaCluster2 ansible_host=129.114.24.223 ansible_connection=ssh ansible_user=cc ansible_ssh_private_key_file=~/.ssh/xm.pem
+Teame3-KafkaCluster3 ansible_host=129.114.25.5 ansible_connection=ssh ansible_user=cc ansible_ssh_private_key_file=~/.ssh/xm.pem
+
+[Master]
+Teame3-KafkaCluster1 ansible_host=129.114.24.206 ansible_connection=ssh ansible_user=cc ansible_ssh_private_key_file=~/.ssh/xm.pem
+
+[Worker]
+Teame3-KafkaCluster2 ansible_host=129.114.24.223 ansible_connection=ssh ansible_user=cc ansible_ssh_private_key_file=~/.ssh/xm.pem
+Teame3-KafkaCluster3 ansible_host=129.114.25.5 ansible_connection=ssh ansible_user=cc ansible_ssh_private_key_file=~/.ssh/xm.pem

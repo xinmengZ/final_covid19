@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+<<<<<<< HEAD
+  name: couchdb-ip-service
+spec:
+#  type: ClusterIP
+  type: NodePort 
+=======
+  name: couchdb-service
+spec:
+#  type: ClusterIP
+  type: NodePort
+>>>>>>> aae17e1d7ca31a948ed521bd1fa3d3d5d64b82db
+  selector:
+    component: couchdb
+  ports:
+  - name: couchdb
+    port: 5984
+    targetPort: 5984
+    nodePort: 30006
+
+
+  

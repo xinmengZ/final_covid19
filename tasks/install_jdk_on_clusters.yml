@@ -1,0 +1,23 @@
+---
+- name: install jdk scala on Teame3-Clusters
+  hosts: MyClusterVMs
+  remote_user:  ubuntu
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: update apt packages
+    apt:
+        update_cache: yes
+
+  - name: install jdk
+    apt:
+        name: default-jdk
+        state: present
+
+  - name: install scala
+    apt:
+        name: scala
+        state: present
+
+...

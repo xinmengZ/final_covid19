@@ -1,0 +1,20 @@
+---
+- name: copy files to cloud VMs
+#  hosts: Teame3-KafkaCluster1 MyChameleonVMs
+  hosts: MyChameleonVMs
+  remote_user:  cc
+  become: true
+  gather_facts: no
+
+  tasks:
+  
+  - name: copy consumer.py
+    copy:
+        src: consumer/consumer.py
+        dest: /home/cc
+  - name: copy consumer dockerfile
+    copy:
+        src: consumer/Dockerfile
+        dest: /home/cc
+    
+...

@@ -1,0 +1,16 @@
+---
+- name: statup zookeeper on cluster
+# for Master
+  hosts: Master
+  remote_user:  cc
+#  become: true
+  gather_facts: no
+
+  tasks:
+  - name: start zookeeper-deployment
+    shell: |
+        kubectl apply -f $HOME/zookeeper-deployment.yaml
+  - name: start zookeeper-ip-service
+    shell: |
+        kubectl apply -f $HOME/zookeeper-ip-service.yaml
+...

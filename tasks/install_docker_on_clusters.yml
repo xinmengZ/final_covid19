@@ -1,0 +1,52 @@
+---
+- name: install docker and images on Teame3-Clusters
+#  hosts: Teame3-KafkaCluster1 MyChameleonVMs
+  hosts: MyClusterVMs
+  remote_user:  ubuntu
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: update apt packages
+    apt:
+        update_cache: yes
+  - name: install apt-transport-https
+    apt:
+        name: apt-transport-https
+        state: present
+  - name: install ca-certificates
+    apt:
+        name: ca-certificates
+        state: present
+  - name: install curl
+    apt:
+        name: curl
+        state: present
+  - name: install software-properties-common
+    apt:
+        name: software-properties-common
+        state: present
+  - name: adding Docker GPG key
+    shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable" 
+  - name: update apt packages
+    apt:
+        update_cache: yes
+  - name: install docker
+    apt:
+        name: docker-ce
+        state: present
+#  - name: copy kafka-zk.image.gz
+#    copy:
+#        src: /vagrant/kafka-zk.image.gz
+#        dest: /home/cc
+#  - name: copy couchdb.image.gz
+#    copy:
+#        src: /vagrant/couchdb.image.gz
+#        dest: /home/cc
+#  - name: unzip images
+#    shell: |
+#        gzip -d /home/cc/kafka-zk.image.gz
+#        gzip -d /home/cc/couchdb.image.gz
+...

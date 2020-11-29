@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+<<<<<<< HEAD
+      component: couchdb
+  template:
+=======
+      component:  couchdb
+  template: #pod level
+>>>>>>> aae17e1d7ca31a948ed521bd1fa3d3d5d64b82db
+    metadata:
+      labels:
+        component: couchdb
+    spec:
+      volumes:
+      - name: couchdb-data
+        emptyDir: {}
+      containers:
+      - name: couchdb
+<<<<<<< HEAD
+        image: couchdb:1.0       
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "125m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        ports:
+          - containerPort: 5984
+        volumeMounts:
+          - name: couchdb-data
+            mountPath: "/opt/couchdb/data"
+        command: ["/opt/couchdb/bin/couchdb"]
+#        args: ["/kafka/config/zookeeper.properties"]
+=======
+        image: couchdb:1.0
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 5984  #from container to pod
+        volumeMounts:
+          - name: couchdb-data
+            mountPath: "/tmp/kafka-logs"       
+#        command: []
+#        args: []
+#        env:
+#          - name: EXT_ADVERTISED
+#            value: "129.114.24.206:30001"
+#          - name: ZOOKEEPER
+#            value: zookeeper-ip-service:2181
+#          - name: INT_LISTENER
+#            value: kafka-1-inner-ip-service:9092
+        env:
+            - name: COUCHDB_USER
+              value: admin
+            - name: COUCHDB_PASSWORD
+              value: couchdb
+>>>>>>> aae17e1d7ca31a948ed521bd1fa3d3d5d64b82db
+        tty: true
+#        livenessProbe:
+#          exec:
+#            command:
+#              - /opt/check.sh
+#          initialDelaySeconds: 30
+#          periodSeconds: 30
+#        readinessProbe:
+#          exec:
+#            command:
+#              - /opt/check.sh
+#          initialDelaySeconds: 30
+#          periodSeconds: 5
+<<<<<<< HEAD
+=======
+        # command:
+        #   - /bin/bash
+>>>>>>> aae17e1d7ca31a948ed521bd1fa3d3d5d64b82db
+#      imagePullSecrets:
+#        - name: regcred
+      

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-1-ip-service
+spec:
+#  type: ClusterIP
+  type: NodePort 
+  selector:
+    component: kafka-1
+  ports:
+#  - name: kafka-int
+#    port: 9092
+#    targetPort: 9092
+  - name: kafka-ext
+    port: 9093  #pod 
+    targetPort: 9093  #cluster net
+    nodePort: 30001  #local vm
+
+
+
+  
